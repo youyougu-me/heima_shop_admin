@@ -176,7 +176,7 @@ export default {
           DeleteUser(id).then(res => {
             this.$message2("", res.data.meta.msg);
           });
-          // this.reload();
+          this.reload();
         }
       });
     }
