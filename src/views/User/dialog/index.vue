@@ -148,9 +148,9 @@ export default {
           });
       } else {
         //添加,只需要打开框,父组件已经做了，这里子组件不需要做什么
+        this.byEdit = false
       }
     },
-    close() {},
     //打开dialog框
     faControlOpen() {
       this.isVisible = true;
@@ -162,6 +162,7 @@ export default {
     //关闭dialog框
     close() {
       this.isVisible = false;
+      //清空
       this.$refs["form"].resetFields();
     },
     submit() {

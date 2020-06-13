@@ -42,6 +42,32 @@ export const defaultRoutes = [
       component: () => import("../views/User/users.vue")
     }]
   },
+  //权限角色
+  {
+    path: "/permit",
+    name: "Permit",
+    component: Layout,
+    redirect: "rights",
+    children: [{
+      path: "/rights",
+      component: () => import("../views/Permit/rightslist.vue")
+    }, {
+      path: "/roles",
+      component: () => import("../views/Permit/roleslist.vue")
+    }]
+  },
+  //商品
+  {
+    path: "/goodsmanager",
+    name: "Goods",
+    component: Layout,
+    redirect: "categories",
+    children: [{
+      path: "/categories",
+      component: () => import("../views/Goods/cate.vue")
+    }]
+  },
+
   //404页面
   {
     path: "/page404",

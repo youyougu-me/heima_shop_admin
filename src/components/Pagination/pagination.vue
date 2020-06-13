@@ -5,7 +5,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="1"
-      :page-sizes="[2,3]"
+      :page-sizes="[5,7,8]"
       :page-size="5"
       layout="total, sizes, prev, pager, next, jumper"
       :total="ownTotal"

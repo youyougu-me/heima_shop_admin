@@ -36,6 +36,30 @@ export function DeleteUser(data) {
   })
 }
 
+/**
+ * 获取角色权限列表
+ */
+export function GetRoleList(data) {
+
+  return service.request({
+    method: "get",
+    url: "/roles",
+    data: data
+  })
+}
+
+/**
+ * 分配用户角色
+ */
+export function SetUserRole(urlParams,data) {
+//路径里面的是用户id
+  return service.request({
+    method: "put",
+    url: "/users/"+urlParams+"/role",
+    data: data
+  })
+}
+
 
 
 

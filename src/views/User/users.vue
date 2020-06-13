@@ -60,7 +60,12 @@
             ></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
-            <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+            <el-button
+              type="warning"
+              icon="el-icon-setting"
+              size="mini"
+              @click="setUserRole(scope.row)"
+            ></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -75,6 +80,13 @@
     ></Pagination>
     <!-- dialog框 -->
     <Dialog ref="dialog" :currentEditData="currentEditData" @getTableData="getTableData"></Dialog>
+    <!-- 设置权限的dialog框 -->
+    <SetRoleDialog
+      ref="dialogS2"
+      :currentEditData="currentEditDataS2"
+      :userRolesListS2="userRolesListS2"
+      @getTableData="getTableData"
+    ></SetRoleDialog>
   </div>
 </template>
 
@@ -92,9 +104,10 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-import { GetUserList, DeleteUser } from "@/api/user";
+import { GetUserList, DeleteUser, GetRoleList } from "@/api/user";
 import Pagination from "@c/Pagination/pagination";
 import Dialog from "./dialog/index";
+import SetRoleDialog from "./dialog/setRoleDialog";
 export default {
   inject: ["reload"],
   data() {
@@ -105,11 +118,15 @@ export default {
       //分页数据
       total: 0,
       pagenum: 1,
-      pagesize: 2,
+      pagesize: 5,
       //当前点击编辑项数据
       currentEditData: {
         id: ""
-      }
+      },
+      // 后缀加S2的即为当前设置角色权限的数据
+      currentEditDataS2: {},
+      //此用户可分配的角色列表
+      userRolesListS2: []
     };
   },
   methods: {
@@ -179,6 +196,21 @@ export default {
           this.reload();
         }
       });
+    },
+    // 点击设置分配权限=====================
+    setUserRole(rowData) {
+      // 在展示对话框之前，获取所有角色的列表(每种用户可分配的角色都一样多)
+      // 因为都一样所以换一个用户时无需重复获取
+      if (this.userRolesListS2.length == 0) {
+        GetRoleList().then(res => {
+          this.userRolesListS2 = res.data.data;
+        });
+      }
+      // 调子组件的方法
+      this.$refs.dialogS2.faControlOpen();
+      // 告诉子组件我是编辑
+      this.$refs.dialogS2.faControlStatus("edit");
+      this.currentEditDataS2 = rowData;
     }
   },
   created() {
@@ -198,7 +230,8 @@ export default {
   },
   components: {
     Pagination,
-    Dialog
+    Dialog,
+    SetRoleDialog
   }
 };
 </script>

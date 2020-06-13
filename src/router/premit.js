@@ -12,7 +12,16 @@ router.beforeEach((to, from, next) => {
       //去拿菜单
       store.dispatch("menus/getMenus").then(res => {
         const menus = res.data.data
-        store.commit("login/SET_MENUS",menus)
+        store.commit("login/SET_MENUS", menus)
+      }).catch(error => {
+        //处理token失效的异常
+        //因为登录信息会缓存,但是token会失效
+        //这种情况下菜单级第一个请求
+        if (error.meta.status == 400) {
+          //先清除过期token
+          localStorage.removeItem("token")
+          next('/login')
+        }
       })
       next()
     } else {

@@ -31,5 +31,6 @@ export default {
 
 <style lang="scss">
 #app {
+  min-width: 1366px;
 }
 </style>
