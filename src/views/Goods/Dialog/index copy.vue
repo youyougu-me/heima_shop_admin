@@ -6,13 +6,14 @@
           <el-input v-model="form.cat_name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="父级分类" :label-width="formLabelWidth">
-          <Cascader
-            @cascaderChange="cascaderChange"
-            ref="cascader"
-            :cascaderShowData="cascaderOptions"
-            :cascaderSetting="cascaderSetting"
-            myStyle="width:100%;"
-          ></Cascader>
+          <el-cascader
+            v-model="cascaderValue"
+            :options="cascaderOptions"
+            @change="cascaderChange"
+            :props="cascaderProps"
+            clearable
+            style="width:100%;"
+          ></el-cascader>
         </el-form-item>
         <el-form-item label="注:" :label-width="formLabelWidth">若未选择父级分类则证明你需要添加一级分类,级联框也支持只选择其中一级</el-form-item>
       </el-form>
@@ -27,7 +28,6 @@
 <script>
 import { validateEmail } from "@/utils/validate";
 import { GetGoodsCategory, AddGoodsCategory } from "@/api/goods";
-import Cascader from "@c/Cascader/index.vue";
 export default {
   inject: ["reload"],
   name: "Dialog",
@@ -50,13 +50,15 @@ export default {
           { required: true, trigger: "blur", message: "请输入分类名称" }
         ]
       },
-      //级联框相关
-      //选项值
+      //级联器选项
       cascaderOptions: [],
-      //配置
-      cascaderSetting: {
+      cascaderValue: [],
+      cascaderProps: {
         value: "cat_id",
-        label: "cat_name"
+        label: "cat_name",
+        children: "children",
+        expandTrigger: "hover",
+        checkStrictly: true
       }
     };
   },
@@ -78,7 +80,6 @@ export default {
         // }
       }
     },
-    close() {},
     //打开dialog框
     faControlOpen() {
       this.isVisible = true;
@@ -95,7 +96,7 @@ export default {
       this.form.cat_pid = 0;
       this.form.cat_level = 0;
       //清空级联框
-      this.$refs.cascader.clearCascader();
+      this.cascaderValue = [];
     },
     submit() {
       this.$refs["form"].validate(valid => {
@@ -135,9 +136,6 @@ export default {
         return {};
       }
     }
-  },
-  components: {
-    Cascader
   }
 };
 </script>

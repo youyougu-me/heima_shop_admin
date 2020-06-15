@@ -14,6 +14,7 @@
       index-text="#"
       :show-index="true"
       v-loading="tree_table_loading"
+      :show-row-hover="false"
     >
       <!-- 是否有效 -->
       <template slot="isOk" slot-scope="scope">

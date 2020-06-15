@@ -62,10 +62,16 @@ export const defaultRoutes = [
     name: "Goods",
     component: Layout,
     redirect: "categories",
-    children: [{
-      path: "/categories",
-      component: () => import("../views/Goods/cate.vue")
-    }]
+    children: [
+      {
+        path: "/categories",
+        component: () => import("../views/Goods/cate.vue")
+      },
+      {
+        path: "/params",
+        component: () => import("../views/Goods/params.vue")
+      }
+    ]
   },
 
   //404页面

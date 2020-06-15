@@ -25,18 +25,7 @@
 
 <script>
 import { validateEmail } from "@/utils/validate";
-import { AddUser } from "@/api/user";
-//因为这里修改当前编辑项的接口特殊,所以重新弄了个
-import axios from "axios";
-axios.interceptors.request.use(
-  function(config) {
-    config.headers.Authorization = localStorage.getItem("token");
-    return config;
-  },
-  function(error) {
-    return Promise.reject(error);
-  }
-);
+import { AddUser, RequestCurrentEditData, SubmitEdittUser } from "@/api/user";
 export default {
   inject: ["reload"],
   name: "Dialog",
@@ -132,23 +121,19 @@ export default {
           JSON.stringify(this.currentEditData)
         );
         //那id去发请求去拿当前项的数据
-        axios
-          .get(
-            `http://127.0.0.1:8888/api/private/v1/users/${this.currentEditData.id}`
-          )
-          .then(res => {
-            const currentEdit = res.data.data;
-            //编辑时用户名禁用
-            this.byEdit = true;
-            //给框赋值
-            this.form.username = currentEdit.username;
-            this.form.email = currentEdit.email;
-            this.form.mobile = currentEdit.mobile;
-            this.form.password = "******";
-          });
+        RequestCurrentEditData(this.currentEditData.id).then(res => {
+          const currentEdit = res.data.data;
+          //编辑时用户名禁用
+          this.byEdit = true;
+          //给框赋值
+          this.form.username = currentEdit.username;
+          this.form.email = currentEdit.email;
+          this.form.mobile = currentEdit.mobile;
+          this.form.password = "******";
+        });
       } else {
         //添加,只需要打开框,父组件已经做了，这里子组件不需要做什么
-        this.byEdit = false
+        this.byEdit = false;
       }
     },
     //打开dialog框
@@ -176,19 +161,17 @@ export default {
               this.reload();
             });
           } else {
-            axios
-              .put(
-                `http://127.0.0.1:8888/api/private/v1/users/${this.currentEditData.id}`,
-                { email: this.form.email, mobile: this.form.mobile }
-              )
-              .then(res => {
-                this.$message2("", res.data.meta.msg);
-                //不能直接刷新,会回到第一页
-                //调父组件的方法
-                // this.reload()
-                //调父亲的方法,依然可以用父亲的参数,只是在父亲那边执行
-                this.$emit("getTableData");
-              });
+            SubmitEdittUser(this.currentEditData.id, {
+              email: this.form.email,
+              mobile: this.form.mobile
+            }).then(res => {
+              this.$message2("", res.data.meta.msg);
+              //不能直接刷新,会回到第一页
+              //调父组件的方法
+              // this.reload()
+              //调父亲的方法,依然可以用父亲的参数,只是在父亲那边执行
+              this.$emit("getTableData");
+            });
           }
         }
       });

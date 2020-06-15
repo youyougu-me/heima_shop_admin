@@ -91,20 +91,14 @@
 </template>
 
 <script>
-//因为这里的改变用户请求特殊,所以重新弄了个
-import axios from "axios";
 //引入删除确认框
 import { confirm } from "@/utils/elefunc";
-axios.interceptors.request.use(
-  function(config) {
-    config.headers.Authorization = localStorage.getItem("token");
-    return config;
-  },
-  function(error) {
-    return Promise.reject(error);
-  }
-);
-import { GetUserList, DeleteUser, GetRoleList } from "@/api/user";
+import {
+  GetUserList,
+  DeleteUser,
+  GetRoleList,
+  ChangeUserStatus
+} from "@/api/user";
 import Pagination from "@c/Pagination/pagination";
 import Dialog from "./dialog/index";
 import SetRoleDialog from "./dialog/setRoleDialog";
@@ -149,17 +143,13 @@ export default {
     },
     //改变用户状态
     userStateChanged(userinfo) {
-      axios
-        .put(
-          `http://127.0.0.1:8888/api/private/v1/users/${userinfo.id}/state/${userinfo.mg_state}`
-        )
-        .then(res => {
-          this.$message({
-            type: "success",
-            message: "修改状态成功",
-            duration: 600
-          });
+      ChangeUserStatus(userinfo).then(res => {
+        this.$message({
+          type: "success",
+          message: "修改状态成功",
+          duration: 600
         });
+      });
     },
     //清空搜索文本框
     clear() {
