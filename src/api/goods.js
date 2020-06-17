@@ -25,7 +25,7 @@ export function AddGoodsCategory(data) {
     })
 }
 
-//分类参数========================================
+//分类参数,主要做的是挂靠三级分类下的性质========================================
 /**
  *获取某个分类所对应的参数列表
  */
@@ -91,6 +91,38 @@ export function AddCategorytoExpandToTag(urlParams, data) {
     return service.request({
         method: "put",
         url: `categories/${urlParams.categoryId}/attributes/${urlParams.attrId}`,
+        data: data
+    })
+}
+
+//商品列表=============================================
+/**
+ *获取商品列表数据
+ */
+export function GetGoodsList(data) {
+    return service.request({
+        method: 'get',
+        url: "/goods/",
+        params: data
+    })
+}
+/**
+ *删除商品
+ */
+export function DeleteGoodsById(urlParams) {
+    return service.request({
+        method: 'delete',
+        url: "/goods/" + urlParams,
+    })
+}
+
+/**
+ *添加商品
+ */
+export function addGoods(data) {
+    return service.request({
+        method: 'post',
+        url: "/goods/",
         data: data
     })
 }

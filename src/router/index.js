@@ -70,6 +70,14 @@ export const defaultRoutes = [
       {
         path: "/params",
         component: () => import("../views/Goods/params.vue")
+      },
+      {
+        path: "/goods",
+        component: () => import("../views/Goods/goodsList.vue")
+      },
+      {
+        path: "/goods/add",
+        component: () => import("../views/Goods/Add/index.vue")
       }
     ]
   },
