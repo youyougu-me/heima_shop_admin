@@ -81,6 +81,19 @@ export const defaultRoutes = [
       }
     ]
   },
+  //订单管理
+  {
+    path: "/ordersmanager",
+    name: "Orders",
+    component: Layout,
+    redirect: "orders",
+    children: [
+      {
+        path: "/orders",
+        component: () => import("../views/Orders/orders.vue")
+      }
+    ]
+  },
 
   //404页面
   {
