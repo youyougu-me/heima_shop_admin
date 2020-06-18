@@ -94,6 +94,19 @@ export const defaultRoutes = [
       }
     ]
   },
+  //数据报表 
+  {
+    path: "/datareport",
+    name: "Datareport",
+    component: Layout,
+    redirect: "reports",
+    children: [
+      {
+        path: "/reports",
+        component: () => import("../views/DataReport/index.vue")
+      }
+    ]
+  },
 
   //404页面
   {
