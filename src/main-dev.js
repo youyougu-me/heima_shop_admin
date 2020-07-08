@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueCompositionApi from "@vue/composition-api";
 import App from "./App.vue";
 import router from "./router/index";
-import "./router/premit"
 import store from "./store";
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -12,6 +11,10 @@ import echarts from 'echarts';
 import eleglobal from "@/utils/eleglobal"
 //引入editor全局组件
 import "@c/globalComponents/editor.js"
+//导入 NProgress
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css' //这个样式必须引入
+import "./router/premit"
 Vue.prototype.$echarts = echarts;
 Vue.use(ElementUI);
 Vue.use(VueCompositionApi);

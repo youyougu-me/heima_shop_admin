@@ -57,6 +57,8 @@ export default {
         ]
       };
       let options = _.merge(obj1, obj2);
+      // const aa = options;
+      // console.log(JSON.stringify(aa));
       myChart.setOption(options);
     });
   },

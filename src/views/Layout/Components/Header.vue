@@ -66,7 +66,7 @@ export default {
   right: 0;
   left: $navMenu;
   height: $layoutHeader;
-  background-color: $mainCcolor2;
+  background-color: $mainColor2;
   line-height: $layoutHeader;
   // @include webkit(box-shadow, 0 3px 16px 0 rgba(0, 0, 0, 0.1));
   @include webkit(transition, all 0.3s ease 0s);
@@ -83,23 +83,23 @@ export default {
   //右边
   .pull-right {
     img {
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 30px;
       float: left;
       border-radius: 50%;
-      margin-top:14px;
+      margin-top:17px;
 
     }
     .username {
       float: left;
       margin-left: 5px;
-      color: $mainCcolor;
+      color: $mainColor;
     }
     .exiticon {
       float: left;
       padding: 0 30px;
       margin-left: 30px;
-      border-left: 1px solid $mainCcolor;
+      border-left: 1px solid $mainColor;
       svg {
         font-size: 25px;
          vertical-align:middle;

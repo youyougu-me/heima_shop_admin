@@ -7,6 +7,7 @@ const whiteRouter = ['/login', '/register']
 
 //路由守卫
 router.beforeEach((to, from, next) => {
+  // NProgress.start()
   if (localStorage.getItem("token")) {
     if (store.getters["login/menus"] == undefined || store.getters["login/menus"].length == 0) {
       //去拿菜单
@@ -16,7 +17,7 @@ router.beforeEach((to, from, next) => {
       }).catch(error => {
         //处理token失效的异常
         //因为登录信息会缓存,但是token会失效
-        //这种情况下菜单级第一个请求
+        //这种情况下菜单是第一个请求
         if (error.meta.status == 400) {
           //先清除过期token
           localStorage.removeItem("token")
@@ -50,5 +51,9 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+router.afterEach(() => {
+  // NProgress.done()
+})
+
 
 

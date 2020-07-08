@@ -57,6 +57,10 @@ export default {
   color:#fff;
   //特有的类
   &.menu {
+    color:$mainColor;
+  }
+  &.exit{
+    color:$mainColor;
   }
 }
 </style>

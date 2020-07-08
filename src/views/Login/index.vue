@@ -3,7 +3,8 @@
     <div class="register_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="@/assets/images/loginav.png" alt />
+        <img src="@/assets/images/logo.png" alt />
+        <h1>彩橙电商后台管理系统</h1>
       </div>
       <!-- 登录表单区域 -->
       <el-form
@@ -29,29 +30,9 @@
             </i>
           </el-input>
         </el-form-item>
-        <!-- 验证码 -->
-        <!-- <el-form-item prop="code" class="item-from">
-          <el-row align="middle">
-            <el-col :span="15" style="width:190px;margin-right:10px;">
-              <el-input v-model="loginForm.code" size="medium" placeholder="请输入验证码"></el-input>
-            </el-col>
-            <el-col :span="9" style="width:128px;">
-              <el-button
-                style="width:100%;"
-                type="default"
-                :disabled="smsButton.stopStatus"
-                size="medium"
-                class="pull-right"
-                @click="getLoginSms"
-                :loading="smsButton.loadingStatus"
-              >{{smsButton.text}}</el-button>
-            </el-col>
-          </el-row>
-        </el-form-item>-->
-
         <!-- 按钮区域 -->
         <el-form-item class="btns item-from">
-          <el-button type="danger" size="medium" @click="login">登录</el-button>
+          <el-button size="medium" @click="login">登录</el-button>
           <span
             @click="register"
             style="margin-left:13px;cursor:pointer;color:#3d3d3d;text-decoration:underline;"
@@ -64,6 +45,7 @@
 
 <script>
 export default {
+  inject: ["reload"],
   data() {
     return {
       loginForm: {
@@ -79,7 +61,8 @@ export default {
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 0, max: 16, message: "长度在 0 到 16 个字符", trigger: "blur" }
         ]
-      }
+      },
+      logintimes: 0
     };
   },
   methods: {
@@ -106,12 +89,23 @@ export default {
             name: "Console"
           });
         })
-        .catch(error => {});
+        .catch(error => {
+          if (
+            error.code === "ECONNABORTED" &&
+            error.message.indexOf("timeout") !== -1
+          ) {
+            this.$message2("error", "登录超时,正在重新尝试...", 2000);
+            if (this.logintimes > 2) {
+              this.$message2("error", "尝试多次,登录失败,请联系管理员", 10000);
+              return false;
+            }
+            this.logintimes = this.logintimes + 1;
+            this.goLogin();
+          }
+        });
     },
     register() {
-      this.$router.push({
-        name: "Register"
-      });
+      this.$message2("warning", "若要注册,请联系管理员!");
     }
   }
 };
@@ -119,6 +113,10 @@ export default {
 
 <style lang="scss">
 #login_container {
+  background: url("../../assets/images/bgc.jpg") no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  position: relative;
   height: 100vh;
   .register_box {
     width: 450px;
@@ -129,21 +127,30 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-color: $mainCcolor;
+    background-color: $mainColor;
     //头像盒子
     .avatar_box {
       height: 40px;
-      width: 40px;
+      width: 450px;
       position: absolute;
-      left: 40%;
+      left: 50%;
       transform: translate(-50%, -50%);
       img {
-        background-color: #fff;
+        background-color: #f28a31;
         border-radius: 30px;
-        border: 1px solid #eee;
+        // border: 1px solid #eee;
         box-shadow: 0 0 2px #ddd;
-        width: 100%;
-        height: 100%;
+        width: 40px;
+        margin-left: 80px;
+      }
+      h1 {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: -30px;
+        font-size: 22px;
+        font-weight: bold;
+        color: #2d2d2d;
       }
     }
     //表单区域

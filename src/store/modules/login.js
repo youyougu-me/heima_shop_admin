@@ -6,7 +6,7 @@ const state = {
   token: localStorage.getItem("token") || '',
   username: localStorage.getItem("username") || '',
   //是否已获取用户权限(意思是有没有分配动态路由)
-  menus: []
+  menus: JSON.parse(sessionStorage.getItem('menus')) || []
 }
 
 const getters = {
@@ -25,8 +25,9 @@ const mutations = {
     state.username = value
   },
   //保存用户菜单
-  SET_MENUS(state,value){
+  SET_MENUS(state, value) {
     state.menus = value
+    sessionStorage.setItem('menus',JSON.stringify(value))
   }
 
 }
@@ -44,6 +45,7 @@ const actions = {
         resolve(response)
       }).catch(err => {
         //返回一个错误的函数
+        console.log(err);
         reject(err)
       })
     })

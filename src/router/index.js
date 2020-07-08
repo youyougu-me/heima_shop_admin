@@ -14,13 +14,9 @@ export const defaultRoutes = [
     path: "/login",
     name: "Login",
     hidden: true,
-    component: () => import("../views/Login/index.vue")
-  },
-  {
-    path: "/register",
-    name: "Register",
-    hidden: true,
-    component: () => import("../views/Register/index.vue")
+    // component: () => import("../views/Login/index.vue")
+    component: () => import(/* webpackChunkName: "group-1" */ "../views/Login/index.vue")
+
   },
   {
     path: "/console",
@@ -29,7 +25,7 @@ export const defaultRoutes = [
     redirect: "index",
     children: [{
       path: "/index",
-      component: () => import("../views/Console/index.vue")
+      component: () => import(/* webpackChunkName: "group-1" */ "../views/Console/index.vue")
     }]
   },
   {
@@ -39,7 +35,10 @@ export const defaultRoutes = [
     redirect: "users",
     children: [{
       path: "/users",
-      component: () => import("../views/User/users.vue")
+      component: () => import(/* webpackChunkName: "group-2" */ "../views/User/users.vue"),
+      meta: {
+        keepAlive: true
+      }
     }]
   },
   //权限角色
@@ -50,10 +49,16 @@ export const defaultRoutes = [
     redirect: "rights",
     children: [{
       path: "/rights",
-      component: () => import("../views/Permit/rightslist.vue")
+      component: () => import(/* webpackChunkName: "group-3" */ "../views/Permit/rightslist.vue"),
+      meta: {
+        keepAlive: true
+      }
     }, {
       path: "/roles",
-      component: () => import("../views/Permit/roleslist.vue")
+      component: () => import(/* webpackChunkName: "group-3" */ "../views/Permit/roleslist.vue"),
+      meta: {
+        keepAlive: true
+      }
     }]
   },
   //商品
@@ -65,19 +70,26 @@ export const defaultRoutes = [
     children: [
       {
         path: "/categories",
-        component: () => import("../views/Goods/cate.vue")
+        component: () => import(/* webpackChunkName: "group-4" */ "../views/Goods/cate.vue"),
+        meta: {
+          keepAlive: true
+        }
+
       },
       {
         path: "/params",
-        component: () => import("../views/Goods/params.vue")
+        component: () => import(/* webpackChunkName: "group-4" */ "../views/Goods/params.vue")
       },
       {
         path: "/goods",
-        component: () => import("../views/Goods/goodsList.vue")
+        component: () => import(/* webpackChunkName: "group-4" */ "../views/Goods/goodsList.vue"),
+        meta: {
+          keepAlive: true
+        }
       },
       {
         path: "/goods/add",
-        component: () => import("../views/Goods/Add/index.vue")
+        component: () => import(/* webpackChunkName: "group-4" */ "../views/Goods/Add/index.vue")
       }
     ]
   },
@@ -90,7 +102,10 @@ export const defaultRoutes = [
     children: [
       {
         path: "/orders",
-        component: () => import("../views/Orders/orders.vue")
+        component: () => import(/* webpackChunkName: "group-4" */ "../views/Orders/orders.vue"),
+        meta: {
+          keepAlive: true
+        }
       }
     ]
   },
@@ -103,7 +118,10 @@ export const defaultRoutes = [
     children: [
       {
         path: "/reports",
-        component: () => import("../views/DataReport/index.vue")
+        component: () => import(/* webpackChunkName: "group-5" */ "../views/DataReport/index.vue"),
+        meta: {
+          keepAlive: true
+        }
       }
     ]
   },
@@ -113,7 +131,7 @@ export const defaultRoutes = [
     path: "/page404",
     name: "Page404",
     hidden: true,
-    component: () => import("../views/Page404/index.vue")
+    component: () => import(/* webpackChunkName: "group-5" */ "../views/Page404/index.vue")
   },
   {
     path: "*",

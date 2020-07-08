@@ -1,8 +1,11 @@
 import axios from "axios";
 import { Message } from "element-ui";
-
-
-const BASEURL = process.env.NODE_ENV === 'production' ? '' : 'http://127.0.0.1:8888/api/private/v1';
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css' //这个样式必须引入
+// axios.defaults.retry = 4;
+// axios.defaults.retryDelay = 1000;
+// https://www.liulongbin.top:8888/api/private/v1
+const BASEURL = process.env.NODE_ENV === 'production' ? 'https://www.liulongbin.top:8888/api/private/v1' : 'http://127.0.0.1:8888/api/private/v1';
 const service = axios.create({
   baseURL: BASEURL,
   timeout: 15000,   // 超时
@@ -15,9 +18,11 @@ const service = axios.create({
 
 
 service.interceptors.request.use(function (config) {
+
   // config.headers['Tokey'] = localStorage.getItem("token")
   // config.headers['UserName'] = localStorage.getItem("username")
   config.headers.Authorization = localStorage.getItem("token")
+  NProgress.start()
   return config;
 }, function (error) {
   return Promise.reject(error);
@@ -25,6 +30,7 @@ service.interceptors.request.use(function (config) {
 
 
 service.interceptors.response.use(function (response) {
+  NProgress.done()
   let data = response.data
   if (data.meta.status !== 200 && data.meta.status !== 201) {
     Message.error(data.meta.msg)
@@ -33,6 +39,10 @@ service.interceptors.response.use(function (response) {
     return response
   }
 }, function (error) {
+  // console.log(error.code);
+  if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
+    Message.error('请求超时')
+  }
   return Promise.reject(error)
 })
 

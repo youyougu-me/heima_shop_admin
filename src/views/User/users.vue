@@ -128,6 +128,8 @@ export default {
     getTableData() {
       const requestData = this.searchAllContent;
       GetUserList(requestData).then(res => {
+        // console.log(res);
+        // console.log(process.env.NODE_ENV);
         this.tableData = res.data.data.users;
         this.total = res.data.data.total;
       });

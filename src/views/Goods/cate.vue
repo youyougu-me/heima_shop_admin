@@ -56,6 +56,7 @@ import Dialog from "./Dialog/index";
 //导入树形嵌套表格
 import ZkTable from "vue-table-with-tree-grid";
 export default {
+  inject: ["reload"],
   data() {
     return {
       breadList: ["商品管理", "商品分类"],
@@ -93,17 +94,41 @@ export default {
           type: "template",
           template: "operation"
         }
-      ]
+      ],
+      logintimes: 0
     };
   },
   methods: {
     requestDataFunc() {
       this.tree_table_loading = true;
-      GetGoodsCategory(this.requestData).then(res => {
-        this.cateGoryData = res.data.data.result;
-        this.paginationTotal = res.data.data.total;
-        this.tree_table_loading = false;
-      });
+      GetGoodsCategory(this.requestData)
+        .then(res => {
+          this.cateGoryData = res.data.data.result;
+          this.paginationTotal = res.data.data.total;
+          this.tree_table_loading = false;
+        })
+        .catch(error => {
+          this.tree_table_loading = false;
+          // if (
+          //   error.code === "ECONNABORTED" &&
+          //   error.message.indexOf("timeout") !== -1
+          // ) {
+          //   this.$message2("error", "请求分类超时,正在重新尝试...", 2000);
+          //   if (this.logintimes > 1) {
+          //     this.$message2(
+          //       "error",
+          //       "尝试多次,请求分类失败,请联系管理员",
+          //       10000
+          //     );
+          //     this.$router.push({
+          //       name: "Console"
+          //     });
+          //   }
+          //   this.logintimes = this.logintimes + 1;
+          //   console.log(this.logintimes);
+          //   this.requestDataFunc();
+          // }
+        });
     },
     //底部分页操作
     currentPageChange(currentPage) {

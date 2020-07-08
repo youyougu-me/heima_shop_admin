@@ -8,6 +8,40 @@ module.exports = {
   outputDir: process.env.NODE_ENV === 'production' ? 'dist' : 'devdist',
   lintOnSave: false,
   chainWebpack: (config) => {
+    //发布模式
+    config.when(process.env.NODE_ENV === 'production', config => {
+      //配置打包入口
+      config.entry('app').clear().add('./src/main-prod.js')
+      //配置打包忽略的依赖
+      config.set('externals', {
+        vue: 'Vue',
+        'vue-router': 'VueRouter',
+        axios: 'axios',
+        lodash: '_',
+        echarts: 'echarts',
+        nprogress: 'NProgress',
+        'vue-quill-editor': 'VueQuillEditor',
+        'element-ui': 'ELEMENT'
+      })
+
+      //定义public/index.html里面的变量
+      config.plugin('html').tap(args => {
+        args[0].isProd = true
+        return args
+      })
+    })
+
+    //开发模式
+    config.when(process.env.NODE_ENV === 'development', config => {
+      config.entry('app').clear().add('./src/main-dev.js')
+      //定义public/index.html里面的变量
+      config.plugin('html').tap(args => {
+        args[0].isProd = false
+        return args
+      })
+    })
+
+
     //配置解析svg文件
     const svgRule = config.module.rule("svg");
     svgRule.uses.clear();
@@ -53,7 +87,15 @@ module.exports = {
   /**
    *  PWA 插件相关配置,see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
    */
-  pwa: {},
+  pwa: {
+    iconPaths: {
+      favicon32: 'favicon.ico',
+      favicon16: 'favicon.ico',
+      appleTouchIcon: 'favicon.ico',
+      maskIcon: 'favicon.ico',
+      msTileImage: 'favicon.ico'
+    }
+  },
   // webpack-dev-server 相关配置
   devServer: {
     open: false, // 编译完成是否打开网页
